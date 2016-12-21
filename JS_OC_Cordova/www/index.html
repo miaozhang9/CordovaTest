@@ -1,0 +1,122 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+            <script type="text/javascript" src="local_intercept/cordova.js"></script>
+            <style>
+                input {
+                    width: 80%;
+                    height: 40;
+                    margin-left:10%;
+                    text-align:center;
+                    border-width:1px;
+                    border-color:#333333;
+                    border-style:solid;
+                    font-size:16px;
+                    vertical-align:middle;
+                    margin-bottom: 10px !important;
+                    padding-top: 10px !important;
+                    margin-top: 10px !important;
+                }
+            </style>
+            
+            <script language="javascript">
+                function fetchVersion() {
+                    cordova.exec(function success(result){
+                                 alert(result);
+                                 }, null, "QHBasicMessagePlugin", "getSDKVersion", [])
+                }
+                function getDeviceMessage() {
+                    function onSuccess(result) {
+                        alert(JSON.stringify(result));
+                    };
+                    function onError(contactError) {
+                        alert('onError!');
+                    };
+                cordova.exec(onSuccess,onError,"QHBasicMessagePlugin","getAllMessage",[])
+                }
+                function setBarTitle(title) {
+                cordova.exec(null,null,"QHNavigationbar","setNaviBarTitle",[title]);
+                }
+                function showBar(show) {
+                cordova.exec(null,null,"QHNavigationbar","showNavigationBar",[show]);
+                }
+                function getCurrentPosition() {
+                    function onSuccess(result) {
+                        alert(JSON.stringify(result));
+                    };
+                    
+                    function onError(error) {
+                        alert(error);
+                    };
+                    cordova.exec(onSuccess,onError,"QHGeoLocation","getLocation",[]);
+                }
+            //人脸识别
+                function faceRecognition() {
+                    cordova.exec(function(successInfo){
+                             alert(successInfo);
+                             document.getElementById('faceRecognitionImageId').src = successInfo;
+                                 deleteFile(successInfo)
+                             },function(failedInfo){
+                             alert(failedInfo);
+                             },"QHCommonPlugin","faceRecognition",[])
+                }
+            //拍摄人像
+                function camaraFetchFace() {
+                    cordova.exec(function(successInfo){
+                             alert(successInfo);
+                             document.getElementById('faceFetchImageId').src = successInfo;
+                                 deleteFile(successInfo)
+                             },function(failedInfo){
+                             alert(failedInfo);
+                             },"QHCommonPlugin","camaraFetchFace",[])
+                }
+                function getContact() {
+                    function onSuccess(result) {
+                        alert(JSON.stringify(result));
+                    };
+                
+                    function onError(contactError) {
+                        alert('onError!');
+                    };
+                    var options = { };
+                    var fields = ["familyName","givenName","phoneNumbers","emails","birthday","addresses"];
+                cordova.exec(onSuccess,onError,"QHContacts","chooseContactProperty",[fields,options])
+                }
+                function scanClick() {
+                    function onSuccess(result) {
+                        alert(result);
+                    };
+                    function onError(error) {
+                        alert(error);
+                    };
+                    cordova.exec(onSuccess,onError,"QHSacnQrCodePlugin","sacnQrCode",[]);
+                }
+                function deleteFile(filePath) {
+                    alert(filePath)
+                    cordova.exec(function success(){
+                                 alert('删除成功');
+                                 },function success(){
+                                 alert('删除失败');
+                                 },"QHCommonPlugin","deleteFile",[filePath]);
+                }
+            
+            </script>
+            <title>Tools List</title>
+            </head>
+
+    <body>
+        <h1>Tools List</h1>
+        <a href="https://www.baidu.com">百度一下</a>
+        <input type="button" value="sdk版本号" onclick="fetchVersion()" />
+        <input type="button" value="设备和app信息" onclick="getDeviceMessage()" />
+        <input type="button" value="设置Navigationbar的title" onclick="setBarTitle('测试用例')" />
+        <input type="button" value="显示Navigationbar" onclick="showBar(false)" />
+        <input type="button" value="隐藏Navigationbar" onclick="showBar(true)" />
+        <input type="button" value="获取定位" onclick="getCurrentPosition()" />
+        <input type="button" value="人脸识别" onclick="faceRecognition()" />
+        <input type="button" value="拍摄人像" onclick="camaraFetchFace()" />
+        <input type="button" value="联系人" onclick="getContact()" />
+        <input type="button" value="扫一扫" onclick="scanClick()" />
+        <input type="button" value="删除" onclick="deleteFile('/Users/apple/QHLoanSK/JS_OC_Cordova/www/idx.html')" />
+    </body>
+</html>
